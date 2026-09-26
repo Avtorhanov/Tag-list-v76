@@ -176,6 +176,7 @@ function toggleTagSelection(id){
 
 function updateSelectionFooter(){
   const btn=$("deleteAll"), count=selectedTagIds.size;
+  const markBtn=$("markAllDone");
   const clearBtn=$("clearChecks");
   if(selectionMode){
     btn.textContent=count?`Удалить выбранные (${count})`:"Удалить выбранные";
@@ -184,19 +185,25 @@ function updateSelectionFooter(){
 
     const total=data.length;
     const allSelected=total>0 && selectedTagIds.size===total;
-    clearBtn.textContent=allSelected?"Снять все":"Отметить все";
-    clearBtn.title=allSelected
-      ?"Снять выбор со всех тегов для копирования"
-      :"Выбрать все теги для копирования";
-    clearBtn.disabled=!total;
+    markBtn.textContent="Выбрать все";
+    markBtn.title="Выбрать все теги для копирования";
+    markBtn.disabled=!total || allSelected;
+
+    clearBtn.textContent="Снять выбор";
+    clearBtn.title="Снять выбор со всех тегов для копирования";
+    clearBtn.disabled=!selectedTagIds.size;
   }else{
     btn.textContent="Удалить теги";
     btn.title="Удалить все теги текущей страницы";
     btn.disabled=false;
 
+    markBtn.textContent="Отметить все";
+    markBtn.title="Отметить все теги как выполненные";
+    markBtn.disabled=!data.length || data.every(item=>item.done);
+
     clearBtn.textContent="Снять отметки";
     clearBtn.title="Снять все отметки «Выполнено»";
-    clearBtn.disabled=false;
+    clearBtn.disabled=!data.length || data.every(item=>!item.done);
   }
 }
 

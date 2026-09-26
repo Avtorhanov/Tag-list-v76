@@ -393,9 +393,17 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
   font-size:30px;line-height:1;box-shadow:var(--shadow-raised);cursor:pointer;
 }
 
-.footer{position:fixed;z-index:19;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:7px;padding:7px 88px calc(7px + env(safe-area-inset-bottom)) 12px;background:var(--bg);border-top:1px solid var(--line)}
+.footer{position:fixed;z-index:19;left:0;right:0;bottom:0;display:flex;align-items:stretch;justify-content:center;gap:7px;padding:7px 88px calc(7px + env(safe-area-inset-bottom)) 12px;background:var(--bg);border-top:1px solid var(--line)}
+
+.statusActions{display:flex;flex:2 1 0;min-width:0;gap:7px}
 
 .reset{flex:1;min-width:0;color:#8b3b37;background:#fff;border:1px solid #f0cfcc;border-radius:12px;padding:10px 6px;cursor:pointer;font-size:calc(11px * var(--fontScale));font-weight:750;box-shadow:0 2px 8px rgba(76,31,31,.05)}
+
+.statusAction,.deleteAction{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.deleteAction{flex:1 1 0}
+
+.reset:disabled{opacity:.45;cursor:default}
 
 .selection-mode-active .footer .reset{transition:transform var(--ui-motion) var(--ui-ease),background-color var(--ui-motion) var(--ui-ease),border-color var(--ui-motion) var(--ui-ease);}
 

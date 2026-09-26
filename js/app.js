@@ -468,27 +468,39 @@ $("deleteAll").onclick=()=>{
   render();
   showToast(`Удалено тегов: ${count}`);
 };
-$("clearChecks").onclick=()=>{
-  // В режиме выборки кнопка работает только с выбором тегов.
+$("markAllDone").onclick=()=>{
   if(selectionMode){
     const total=data.length;
     if(!total){showToast("На странице нет тегов");return;}
-    const allSelected=selectedTagIds.size===total;
-    if(allSelected){
-      selectedTagIds.clear();
-      updateSelectionFooter();
-      renderList();
-      showToast("Выбор снят со всех тегов");
-    }else{
-      selectedTagIds=new Set(data.map(item=>item.id));
-      updateSelectionFooter();
-      renderList();
-      showToast(`Выбраны все теги: ${total}`);
-    }
+    selectedTagIds=new Set(data.map(item=>item.id));
+    updateSelectionFooter();
+    renderList();
+    showToast(`Выбраны все теги: ${total}`);
     return;
   }
 
-  // В обычном режиме кнопка сразу снимает статус «Выполнено».
+  const todo=data.filter(item=>!item.done).length;
+  if(!todo){showToast("Все теги уже отмечены");return;}
+  data.forEach(item=>item.done=true);
+  save();
+  filter="all";
+  render();
+  showToast(`Отмечены как выполненные: ${todo}`);
+};
+
+$("clearChecks").onclick=()=>{
+  // В режиме выборки кнопка снимает весь выбор, не меняя статусы тегов.
+  if(selectionMode){
+    if(!selectedTagIds.size){showToast("Выбор уже пуст");return;}
+    selectedTagIds.clear();
+    selectionMode=false;
+    document.body.classList.remove("selection-mode-active");
+    updateSelectionFooter();
+    renderList();
+    showToast("Выбор снят со всех тегов");
+    return;
+  }
+
   const marked=data.filter(item=>item.done).length;
   if(!marked){showToast("Отметок для сброса нет");return;}
   data.forEach(item=>item.done=false);

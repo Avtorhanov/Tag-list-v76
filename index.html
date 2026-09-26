@@ -70,8 +70,11 @@
   </section>
   <div class="list" id="list"></div>
   <div class="footer">
-    <button class="reset" id="clearChecks" title="Снять все отметки «Выполнено»">Снять отметки</button>
-    <button class="reset" id="deleteAll" title="Удалить все теги текущей страницы">Удалить теги</button>
+    <div class="statusActions" aria-label="Управление статусами и выбором">
+      <button class="reset statusAction" id="markAllDone" title="Отметить все теги как выполненные">Отметить все</button>
+      <button class="reset statusAction" id="clearChecks" title="Снять все отметки «Выполнено»">Снять отметки</button>
+    </div>
+    <button class="reset deleteAction" id="deleteAll" title="Удалить все теги текущей страницы">Удалить теги</button>
   </div>
 </div>
 
