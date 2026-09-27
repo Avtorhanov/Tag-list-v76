@@ -1,3 +1,4 @@
+
 :root{
   --fontScale:1;
   --appFont:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
@@ -34,6 +35,19 @@ button, input, select, textarea, option, label, summary {
 button{border:0;touch-action:manipulation}
 
 .app{max-width:760px;margin:0 auto;padding:calc(8px + env(safe-area-inset-top)) 12px 108px}
+body.modal-open{
+  overflow:hidden !important;
+  overscroll-behavior:none !important;
+}
+
+body.modal-open .app{
+  pointer-events:none;
+}
+
+body.modal-open .overlay.show{
+  pointer-events:auto;
+}
+
 
 .top{
   position:sticky;top:0;z-index:10;background:var(--bg);padding:4px 0 7px;
@@ -75,7 +89,7 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 
 .search{flex:1;min-width:0;border:1px solid var(--line);background:#fff;border-radius:13px;padding:9px 11px;outline:none;box-shadow:0 1px 3px rgba(30,41,59,.03)}
 
-.searchClose{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:21px;cursor:pointer}
+.searchClose{width:44px;height:44px;min-width:44px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:21px;cursor:pointer}
 
 .smallbtn{
   min-width:42px;height:42px;border-radius:12px;background:#fff;border:1px solid var(--line);
@@ -91,7 +105,7 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 
 .addChoice{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:2px 0 10px}
 
-.choice{background:var(--control,#f7f9fc);border:1px solid var(--line);border-radius:11px;padding:9px 7px;text-align:center;cursor:pointer;font-weight:700}
+.choice{background:var(--control,#f7f9fc);border:1px solid var(--line);border-radius:11px;min-height:44px;padding:.55em 7px;text-align:center;cursor:pointer;font-weight:700}
 
 .choice .ico{display:block;font-size:21px;margin-bottom:2px}
 
@@ -141,7 +155,7 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
   .importLegend,.importLegend .legendAdd,.importLegend .legendDone{font-size:15px}
 }
 
-.importList{display:grid;gap:4px;max-height:55vh;overflow:auto;margin:5px 0 8px}
+.importList{display:grid;touch-action:pan-y;gap:4px;max-height:none;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;margin:5px 0 0;padding:2px 0 8px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 
 .importItem{
   background:#f7f9fc;border:1px solid var(--line);border-radius:9px;padding:5px 6px;
@@ -175,16 +189,28 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 
 .importTaskToggle{display:none}
 
+#importActions,#fileImportActions{
+  position:relative;z-index:50;flex:0 0 auto;
+  background:#0b132b !important;opacity:1 !important;
+  padding:6px 12px calc(5px + env(safe-area-inset-bottom));
+  margin:8px -12px calc(-1 * env(safe-area-inset-bottom));
+  box-shadow:0 -8px 18px rgba(0,0,0,.22);
+  border-top:1px solid rgba(255,255,255,.12);
+  isolation:isolate;
+}
+#importActions .action,#fileImportActions .action{min-height:40px;padding:6px 10px}
+#importActions::before,#fileImportActions::before{content:"";position:absolute;inset:0;z-index:-1;background:#0b132b;opacity:1;}
+
 .importTaskWrap{display:none}
 
 .importTaskWrap.open{display:block}
 
-.importTask{width:100%;box-sizing:border-box;min-height:34px;resize:vertical;margin-top:4px;border:1px solid #d1d5db;border-radius:8px;padding:6px 7px;font-size:max(15px,calc(15px * var(--fontScale)));line-height:1.2;background:var(--card);color:var(--text);font-family:inherit}
+.importTask{width:100%;box-sizing:border-box;min-height:50px;max-height:104px;resize:none;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:4px;border:1px solid #d1d5db;border-radius:8px;padding:6px 7px;font-size:max(15px,calc(15px * var(--fontScale)));line-height:1.2;background:var(--card);color:var(--text);font-family:inherit}
 
 .importDoneWrap{display:contents}
 
 .importTask{
-  width:100%;box-sizing:border-box;min-height:34px;resize:vertical;margin-top:5px;
+  width:100%;box-sizing:border-box;min-height:50px;max-height:104px;resize:none;overflow-y:auto;-webkit-overflow-scrolling:touch;margin-top:5px;
   border:1px solid #cfd7e3;border-radius:8px;padding:7px 8px;font-size:max(15px,calc(15px * var(--fontScale)));
   line-height:1.25;background:var(--card);color:var(--text);font-family:inherit;outline:none;box-shadow:none;-webkit-appearance:none;appearance:none;
 }
@@ -239,13 +265,13 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 
 .summaryFoot{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:calc(12px * var(--fontScale))}
 
-.list{display:grid;gap:6px;align-content:start;padding-bottom:88px;contain:layout style}
+.list{display:grid;gap:6px;align-content:start;padding-bottom:calc(148px + env(safe-area-inset-bottom));contain:layout style}
 .list:empty{padding-bottom:0}
 
 .row{
-  display:flex;align-items:center;gap:10px;background:var(--card);
-  border:1px solid var(--line);border-radius:12px;padding:5px 9px;
-  min-height:42px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-y;box-shadow:0 2px 7px rgba(31,49,76,.055);
+  display:flex;align-items:center;gap:8px;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:4px 9px;
+  min-height:50px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-y;box-shadow:0 2px 7px rgba(31,49,76,.055);
 }
 
 .row.done{background:var(--soft-success);border-color:#d8eadf}
@@ -258,7 +284,8 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 .row{touch-action:pan-y;}
 
 /* v62 — действия тега: компактные, не меняют высоту карточки. */
-.row{position:relative;padding-right:138px;}
+.row{position:relative;padding-right:48px;}
+.row.selection-mode{padding-right:138px;}
 
 .rowActions{position:absolute;right:7px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:3px;z-index:2;}
 
@@ -312,14 +339,15 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 
 
 @media (max-width:380px){
-  .row{padding-right:132px}
+  .row{padding-right:48px}
+  .row.selection-mode{padding-right:132px}
   .rowActions{right:5px;gap:3px}
   .rowAction{width:28px;height:28px;flex-basis:28px;font-size:14px}
 }
 
 
 .check{
-  width:25px;height:25px;flex:0 0 25px;border-radius:9px;
+  width:44px;height:44px;flex:0 0 44px;border-radius:9px;
   border:2px solid #98a3b4;background:#fff;display:grid;place-items:center;
   cursor:pointer;position:relative;
 }
@@ -370,17 +398,20 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 }
 
 .taskEditorWrap.open{
-  max-height:116px;opacity:1;transform:translateY(0);margin-top:5px;pointer-events:auto;
+  max-height:140px;opacity:1;transform:translateY(0);margin-top:5px;pointer-events:auto;
 }
 
-.taskBox{padding:0;background:transparent;border:0;border-radius:0;width:100%;max-width:100%;box-sizing:border-box}
+.taskBox{padding:0;background:transparent;border:0;border-radius:10px;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden}
 
 .taskBox textarea{
-  display:block;width:100%;min-width:0;box-sizing:border-box;min-height:86px;max-height:104px;resize:vertical;
-  border:1px solid #cfd7e3;border-radius:10px;padding:9px 10px;background:#fff;
+  display:block;width:100%;min-width:0;box-sizing:border-box;min-height:50px;max-height:125px;resize:none;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  border:1px solid #cfd7e3;border-radius:10px;padding:9px 10px;background:#fff;overflow:hidden;
   outline:none;box-shadow:none;font:inherit;font-size:calc(15px * var(--fontScale));
   line-height:1.35;-webkit-appearance:none;appearance:none;
 }
+
+.taskEditorWrap.focused{max-height:190px;}
+.taskEditorWrap.focused .taskBox textarea{min-height:100px;max-height:170px;}
 
 .longhint{font-size:calc(11px * var(--fontScale));color:#9ca3af}
 
@@ -393,11 +424,11 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
   font-size:30px;line-height:1;box-shadow:var(--shadow-raised);cursor:pointer;
 }
 
-.footer{position:fixed;z-index:19;left:0;right:0;bottom:0;display:flex;align-items:stretch;justify-content:center;gap:7px;padding:7px 88px calc(7px + env(safe-area-inset-bottom)) 12px;background:var(--bg);border-top:1px solid var(--line)}
+.footer{position:fixed;z-index:19;left:0;right:0;bottom:0;display:flex;align-items:stretch;justify-content:center;gap:7px;padding:8px 88px calc(8px + env(safe-area-inset-bottom)) 12px;background:var(--bg);border-top:1px solid var(--line);box-shadow:0 -5px 18px rgba(31,49,76,.08);isolation:isolate}
 
 .statusActions{display:flex;flex:2 1 0;min-width:0;gap:7px}
 
-.reset{flex:1;min-width:0;color:#8b3b37;background:#fff;border:1px solid #f0cfcc;border-radius:12px;padding:10px 6px;cursor:pointer;font-size:calc(11px * var(--fontScale));font-weight:750;box-shadow:0 2px 8px rgba(76,31,31,.05)}
+.reset{flex:1;min-width:0;min-height:44px;color:#8b3b37;background:#fff;border:1px solid #f0cfcc;border-radius:12px;padding:.55em .5em;cursor:pointer;font-size:clamp(11px,calc(11px * var(--fontScale)),15px);font-weight:750;line-height:1.15;box-shadow:0 2px 8px rgba(76,31,31,.05)}
 
 .statusAction,.deleteAction{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -418,7 +449,7 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 
 .overlay.show{visibility:visible;opacity:1;pointer-events:auto;transition:opacity .16s ease,visibility 0s linear 0s}
 
-.sheet{width:min(760px,100%);background:var(--card);border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(23,32,51,.16);transform:translateY(8px) scale(.94);transform-origin:center bottom;transition:transform .16s cubic-bezier(.2,.8,.2,1)}
+.sheet{width:min(760px,100%);max-height:min(88dvh,760px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scroll-padding-bottom:180px;background:var(--card);border-radius:20px 20px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(23,32,51,.16);transform:translateY(8px) scale(.94);transform-origin:center bottom;transition:transform .16s cubic-bezier(.2,.8,.2,1)}
 
 .overlay.show .sheet{transform:translateY(0) scale(1)}
 
@@ -434,25 +465,25 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
 }
 
 .field textarea{
-  width:100%;min-height:64px;max-height:140px;resize:vertical;box-sizing:border-box;
+  width:100%;min-height:64px;max-height:140px;resize:none;box-sizing:border-box;overflow-y:auto;-webkit-overflow-scrolling:touch;
   border:1px solid var(--input-border);border-radius:11px;padding:11px 12px;
   outline:none;background:var(--input-bg);color:var(--text);font:inherit;font-size:max(16px,calc(16px * var(--fontScale)));line-height:1.3;
   -webkit-appearance:none;appearance:none;box-shadow:none;
 }
 
-.field textarea:focus,.field textarea:focus-visible{outline:none!important;box-shadow:none!important;}
+.field textarea:focus,.field textarea:focus-visible{outline:none!important;box-shadow:none!important;min-height:128px;max-height:200px;}
 
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 
 .action{
-  padding:12px;border-radius:12px;background:#eef1f5;cursor:pointer;font-weight:700;color:var(--text);
+  min-height:44px;padding:.65em 12px;border-radius:12px;background:#eef1f5;cursor:pointer;font-weight:700;color:var(--text);line-height:1.2;
 }
 
 .action.primary{background:var(--accent);color:#fff}
 
 .action.delete{background:#fff0ef;color:var(--danger);border:1px solid #ffd3cf}
 
-.closex{float:right;background:#f0f3f7;border-radius:11px;width:34px;height:34px;cursor:pointer;color:var(--text);font-size:20px}
+.closex{float:right;background:#f0f3f7;border-radius:11px;width:44px;height:44px;min-width:44px;min-height:44px;cursor:pointer;color:var(--text);font-size:24px;line-height:1;display:grid;place-items:center;padding:0;touch-action:manipulation}
 
 .duplicateMessage{padding:12px 13px;border:1px solid #f0cfcc;background:#fff7f6;border-radius:12px;line-height:1.45;color:var(--text);}
 
@@ -515,7 +546,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .utilityRow{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:nowrap;width:100%;min-width:0}
 .utilityRow>*{min-width:0}
 
-.utilityBtn{width:auto;height:40px;min-width:0;flex:1 1 0;padding:0;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--text);font-size:20px;font-weight:750;cursor:pointer;box-shadow:0 1px 3px rgba(30,41,59,.03);display:grid;place-items:center;line-height:1}
+.utilityBtn{width:auto;min-height:44px;height:44px;min-width:0;flex:1 1 0;padding:0;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--text);font-size:20px;font-weight:750;cursor:pointer;box-shadow:0 1px 3px rgba(30,41,59,.03);display:grid;place-items:center;line-height:1}
 
 .utilityBtn.primaryAction{color:var(--accent);border-color:#bfd3f5;background:var(--soft)}
 
@@ -529,7 +560,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 @media (max-width:420px){
   .utilityRow{gap:4px}
-  .utilityBtn{height:38px;font-size:18px;border-radius:10px}
+  .utilityBtn{min-height:44px;height:44px;font-size:clamp(16px,calc(18px * var(--fontScale)),22px);border-radius:10px}
   .fontFamilyBtn{font-size:16px}
   .uiIcon{width:25px;height:25px}
 }
@@ -548,7 +579,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 .pageStrip::-webkit-scrollbar{display:none}
 
-.pageChip{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;position:relative;display:flex;align-items:center;gap:6px;flex:0 0 auto;max-width:180px;min-height:36px;padding:7px 10px;background:var(--card);color:var(--muted);border:1px solid var(--line);border-radius:11px;cursor:pointer;font-size:calc(12px * var(--fontScale));font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;touch-action:pan-x;transition:transform .14s ease,opacity .14s ease}
+.pageChip{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none;position:relative;display:flex;align-items:center;gap:6px;flex:0 0 auto;max-width:180px;min-height:44px;padding:7px 10px;background:var(--card);color:var(--muted);border:1px solid var(--line);border-radius:11px;cursor:pointer;font-size:calc(12px * var(--fontScale));font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;touch-action:pan-x;transition:transform .14s ease,opacity .14s ease}
 
 .pageChip.active{background:var(--soft);color:var(--accent-strong);border-color:#9bbcff}
 
@@ -560,7 +591,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 .pageCount{color:var(--muted);font-size:calc(10px * var(--fontScale));font-weight:700}
 
-.pageAction{flex:0 0 auto;min-width:42px;min-height:38px;padding:5px 9px;background:var(--card);color:var(--accent-strong);border:1px solid #bfd3f5;border-radius:11px;font-size:25px;line-height:1;font-weight:500;cursor:pointer;display:grid;place-items:center}
+.pageAction{flex:0 0 auto;min-width:44px;min-height:44px;padding:5px 9px;background:var(--card);color:var(--accent-strong);border:1px solid #bfd3f5;border-radius:11px;font-size:25px;line-height:1;font-weight:500;cursor:pointer;display:grid;place-items:center}
 
 .addPageAction span{transform:translateY(-1px)}
 
@@ -586,13 +617,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 .pageManageBar.show{display:flex;}
 
-.pageManageBar button{flex:1 1 0;min-width:0;height:36px;padding:0 7px;border:1px solid var(--line);border-radius:9px;background:var(--control);color:var(--text);font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;}
+.pageManageBar button{flex:1 1 0;min-width:0;height:44px;padding:0 7px;border:1px solid var(--line);border-radius:9px;background:var(--control);color:var(--text);font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;}
 
 .pageManageBar button:active{transform:scale(.97);background:var(--soft);}
 
 .pageManageBar .pageManageDelete{color:var(--danger);}
 
-.pageManageBar .pageManageClose{flex:0 0 40px;font-size:21px;line-height:1;}
+.pageManageBar .pageManageClose{flex:0 0 44px;font-size:21px;line-height:1;}
 
 .pageContextMenu{display:none!important;}
 
@@ -629,8 +660,10 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   top:12px;
   right:12px;
   float:none;
-  width:34px;
-  height:34px;
+  width:44px;
+  height:44px;
+  min-width:44px;
+  min-height:44px;
   z-index:2;
 }
 
@@ -778,6 +811,10 @@ html,body{min-height:100%;background:var(--bg)}
 }
 
 
+
+#overlay.import-mode .sheet{max-height:min(94dvh,820px);padding-bottom:calc(5px + env(safe-area-inset-bottom));}
+#overlay.import-mode .importList{overscroll-behavior:contain;}
+
 /* Поиск */
 .searchPanel{
   display:flex;
@@ -818,7 +855,7 @@ html,body{min-height:100%;background:var(--bg)}
 }
 
 .importTaskWrap.open{
-  max-height:220px;
+  max-height:104px;
   opacity:1;
   transform:translateY(0);
   margin-top:4px;
@@ -943,7 +980,7 @@ button,.choice,.tab,.pageChip,.pageAction,.fontChoice{
 @media (max-width:380px){
   .pageManageBar{gap:4px;padding-left:4px;padding-right:4px}
   .pageManageBar button{padding-left:5px;padding-right:5px;font-size:11px}
-  .pageManageBar .pageManageClose{flex-basis:36px}
+  .pageManageBar .pageManageClose{flex-basis:44px}
 }
 
 
@@ -1012,9 +1049,64 @@ button,.choice,.tab,.pageChip,.pageAction,.fontChoice{
 @media (max-width:380px){
   .pageManageBar{gap:5px}
   .pageManageBar button{padding-left:5px;padding-right:5px;font-size:11px}
-  .pageManageBar .pageManageClose{flex-basis:36px}
+  .pageManageBar .pageManageClose{flex-basis:44px}
 }
 
 
 
 .installIconBtn{width:38px;min-width:38px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:22px;line-height:1;flex:0 0 auto;}
+
+/* v67.7 — более плавная мобильная анимация. Переходы остаются короткими,
+   но без резкого scale-эффекта и с единым easing для WebKit/Android. */
+:root{
+  --ui-motion:.34s;
+  --ui-ease:cubic-bezier(.16,1,.3,1);
+}
+
+.searchPanel{
+  transition:max-height var(--ui-motion) var(--ui-ease),opacity var(--ui-motion) var(--ui-ease),
+             transform var(--ui-motion) var(--ui-ease),margin-top var(--ui-motion) var(--ui-ease);
+}
+
+.pageManageBar{
+  transition:max-height var(--ui-motion) var(--ui-ease),opacity var(--ui-motion) var(--ui-ease),
+             transform var(--ui-motion) var(--ui-ease),margin-top var(--ui-motion) var(--ui-ease),
+             padding var(--ui-motion) var(--ui-ease),border-color var(--ui-motion) var(--ui-ease),
+             box-shadow var(--ui-motion) var(--ui-ease);
+}
+
+.pageContextMenu{
+  transform:translateY(-7px) scale(.96);
+  transition:opacity var(--ui-motion) var(--ui-ease),transform var(--ui-motion) var(--ui-ease);
+  will-change:opacity,transform;
+}
+.pageContextMenu.show{transform:translateY(0) scale(1)}
+
+.fontBubble,.toast{
+  transition:opacity var(--ui-motion) var(--ui-ease),transform var(--ui-motion) var(--ui-ease);
+}
+
+.fontBubble{transform:translateY(-7px) scale(.97)}
+.fontBubble.show{transform:translateY(0) scale(1)}
+
+.tab-pop{animation:tabIn var(--ui-motion) var(--ui-ease) both}
+
+@keyframes tabIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.fullReportSheet,.sheet{
+  will-change:transform,opacity;
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+
+
+/* v67.8 structured import-panel fix: the list owns scrolling; buttons form an opaque lower boundary. */
+#overlay.import-mode .sheet{max-height:min(94dvh,820px);overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+#overlay.import-mode #photoForm,#overlay.import-mode #fileForm{flex:1 1 auto;min-height:0;display:flex !important;flex-direction:column;}
+#overlay.import-mode .importList{flex:1 1 auto;min-height:0;max-height:none;overscroll-behavior:contain;}
+#overlay.import-mode #importActions,#overlay.import-mode #fileImportActions{flex:0 0 auto;background:#0b132b !important;opacity:1 !important;z-index:50;}

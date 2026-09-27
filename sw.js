@@ -1,7 +1,11 @@
-const CACHE_NAME = 'tag-list-v67-3-hardened';
+const CACHE_NAME = 'tag-list-v67-8-structured-import-fix';
 const APP_SHELL = [
   './',
   './index.html',
+  './css/app.css',
+  './js/app.js',
+  './js/ocr.js',
+  './manifest.webmanifest',
   './manifest.webmanifest',
   './css/app.css',
   './js/storage.js',
