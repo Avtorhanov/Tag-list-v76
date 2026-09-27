@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tag-list-v67-8-structured-import-fix';
+const CACHE_NAME = 'tag-list-v67-8-structured-final-published';
 const APP_SHELL = [
   './',
   './index.html',

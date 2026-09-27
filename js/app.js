@@ -1264,8 +1264,8 @@ function setAddMode(mode){
   $("fileChoice").classList.toggle("active",fileMode);
   $("addChoice").style.display=(photoMode||fileMode)?"none":"grid";
   $("manualForm").style.display=mode==="manual"?"block":"none";
-  $("photoForm").style.display=photoMode?"block":"none";
-  $("fileForm").style.display=fileMode?"block":"none";
+  $("photoForm").style.display=photoMode?"flex":"none";
+  $("fileForm").style.display=fileMode?"flex":"none";
 }
 
 function openAdd(){
